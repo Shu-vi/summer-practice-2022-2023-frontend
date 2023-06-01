@@ -1,14 +1,17 @@
 import React from 'react';
 import { Navbar, Nav, Button } from 'react-bootstrap';
+import {useNavigate} from "react-router-dom";
+import {GAMES_ROUTE} from "../utils/consts";
 
 const NavigationBar = (props) => {
     // Получаем имя пользователя из props
-    const userName = props.userName;
+    const navigate = useNavigate();
 
     // Функция для выхода из аккаунта
     const handleLogout = () => {
         // Здесь можно добавить логику для выхода
-        console.log('Вы вышли из аккаунта');
+        localStorage.clear();
+        navigate(GAMES_ROUTE);
     };
 
     return (

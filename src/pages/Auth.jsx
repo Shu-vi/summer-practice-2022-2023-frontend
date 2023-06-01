@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import {Form, Button, Container} from 'react-bootstrap';
 import {createUser, loginUser} from "../api/UserApi";
+import {useNavigate} from 'react-router-dom';
+import {GAMES_ROUTE} from "../utils/consts";
 
 function Auth(props) {
     const [type, setType] = useState('login');
-
+    const navigate = useNavigate();
     const [data, setData] = useState({
         username: '',
         password: '',
@@ -34,12 +36,15 @@ function Auth(props) {
         });
     }
 
+    const saveToken = (token) => {
+        localStorage.setItem('token', JSON.stringify(token));
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             if (type === 'register') {
-                const user = await createUser({...data});
+                await createUser({...data});
                 setData({
                     username: '',
                     password: '',
@@ -50,7 +55,9 @@ function Auth(props) {
                 });
                 alert('Регистрация прошла успешно');
             } else {
-                const user = await loginUser({username: data.username, password: data.password});
+                const token = await loginUser({...data});
+                saveToken(token);
+                navigate(GAMES_ROUTE);
             }
         } catch (e) {
             if (e.response.data.message) {
