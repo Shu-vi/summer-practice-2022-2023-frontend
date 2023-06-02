@@ -41,6 +41,9 @@ const GameItem = ({game, ...props}) => {
         } catch (e) {
             if (e.response.data.message) {
                 alert(e.response.data.message);
+                if (e.response.status === 401) {
+                    navigate(LOGIN_ROUTE);
+                }
             } else {
                 alert(e.message);
             }

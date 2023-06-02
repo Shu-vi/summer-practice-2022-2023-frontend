@@ -1,83 +1,30 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Form, InputGroup, FormControl, Container} from 'react-bootstrap';
 import MessageItem from "../components/MessageItem";
+import {useParams} from "react-router-dom";
+import {fetchPhrasesByGameId} from "../api/PhraseApi";
 
 function Game(props) {
-    // Получаем список сообщений из props
-    const messages = [
-        {
-            id: 1,
-            sender: 'Alex',
-            date: '01.06.2023',
-            time: '12:15',
-            text: 'Привет, кто хочет поиграть?',
-        },
-        {
-            id: 2,
-            sender: 'Bob',
-            date: '01.06.2023',
-            time: '12:16',
-            text: 'Я хочу, какая игра?',
-        },
-        {
-            id: 3,
-            sender: 'Charlie',
-            date: '01.06.2023',
-            time: '12:17',
-            text: 'Давайте в шахматы',
-        },
-        {
-            id: 4,
-            sender: 'Diana',
-            date: '01.06.2023',
-            time: '12:18',
-            text: 'Я тоже за шахматы',
-        },
-        {
-            id: 4,
-            sender: 'Diana',
-            date: '01.06.2023',
-            time: '12:18',
-            text: 'Я тоже за шахматы',
-        },
-        {
-            id: 4,
-            sender: 'Diana',
-            date: '01.06.2023',
-            time: '12:18',
-            text: 'Я тоже за шахматы',
-        },
-        {
-            id: 4,
-            sender: 'Diana',
-            date: '01.06.2023',
-            time: '12:18',
-            text: 'Я тоже за шахматы',
-        },
-    ];
-
-
-    // Создаем локальный стейт для текста сообщения
+    const {id} = useParams();
+    const [messages, setMessages] = useState([]);
     const [text, setText] = useState('');
 
-    // Функция для обработки изменения поля ввода
+    useEffect(() => {
+        fetchPhrasesByGameId(id)
+            .then(data => console.log(data))
+            .catch(e => console.log(e));
+    }, []);
+
     const handleTextChange = (e) => {
         setText(e.target.value);
     };
 
-    // Функция для обработки нажатия на кнопку "Покинуть игру"
     const handleLeave = () => {
-        // Здесь можно добавить логику для покидания игры
-        console.log('Вы покинули игру');
+
     };
 
-    // Функция для обработки нажатия на кнопку "Отправить"
     const handleSubmit = (e) => {
-        // Предотвращаем перезагрузку страницы
         e.preventDefault();
-        // Здесь можно добавить логику для отправки сообщения
-        console.log('Вы отправили сообщение:', text);
-        // Очищаем поле ввода
         setText('');
     };
 
