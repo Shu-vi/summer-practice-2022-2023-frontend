@@ -15,12 +15,17 @@ export const fetchGameById = async (id) => {
     return data;
 };
 
+export const fetchGameByUsername = async (username) => {
+    const {data} = await $authHost.get('api/game/by-username/' + username);
+    return data;
+};
+
 export const connectToGame = async (username, gameId) => {
     const {data} = await $authHost.post('api/game/connect/' + gameId, {username});
     return data;
 };
 
-export const disconnectToGame = async (username, gameId) => {
+export const disconnectFromGame = async (username, gameId) => {
     const {data} = await $authHost.post('api/game/disconnect/' + gameId, {username});
     return data;
 };

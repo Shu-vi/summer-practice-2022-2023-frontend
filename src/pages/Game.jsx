@@ -1,18 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Form, InputGroup, FormControl, Container} from 'react-bootstrap';
 import MessageItem from "../components/MessageItem";
-import {useParams} from "react-router-dom";
-import {fetchPhrasesByGameId} from "../api/PhraseApi";
+import {useNavigate, useParams} from "react-router-dom";
+import {createPhrase, fetchPhrasesByGameId} from "../api/PhraseApi";
+import {disconnectFromGame} from "../api/GameApi";
+import {GAMES_ROUTE} from "../utils/consts";
+import {useErrorHandler} from "../hooks/useErrorHandler";
+import {useSelector} from "react-redux";
 
 function Game() {
     const {id} = useParams();
     const [messages, setMessages] = useState([]);
     const [text, setText] = useState('');
+    const navigate = useNavigate();
+    const errorHandler = useErrorHandler();
+    const user = useSelector(state => state.auth.user)
 
     useEffect(() => {
         fetchPhrasesByGameId(id)
-            .then(data => console.log(data))
-            .catch(e => console.log(e));
+            .then(data => setMessages(data))
+            .catch(e => errorHandler(e));
     }, []);
 
     const handleTextChange = (e) => {
@@ -20,11 +27,17 @@ function Game() {
     };
 
     const handleLeave = () => {
-
+        disconnectFromGame(user.username, id)
+            .then(() => navigate(GAMES_ROUTE))
+            .catch(e => errorHandler(e));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        createPhrase({gameId: id, username: user.username, text})
+            .then(() => (fetchPhrasesByGameId(id)))
+            .then(data => setMessages(data))
+            .catch(e=> console.error(e))
         setText('');
     };
 
@@ -35,7 +48,7 @@ function Game() {
             </Button>
             <div className="mt-3" style={{height: '70vh', overflowY: 'scroll', border: 'solid 1px black'}}>
                 {messages.map((message) => (
-                    <MessageItem message={message} key={message.id}/>
+                    <MessageItem message={message} key={message.phrase.timestamp}/>
                 ))}
             </div>
             <Form onSubmit={handleSubmit}>

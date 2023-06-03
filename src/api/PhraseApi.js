@@ -6,6 +6,6 @@ export const fetchPhrasesByGameId = async (id) => {
 };
 
 export const createPhrase = async ({gameId, username, text}) => {
-    const {data} = await $authHost.post('api/game', {gameId, username, text});
+    const {data} = await $authHost.post('api/phrase/', {gameId, username, text});
     return data;
 };
