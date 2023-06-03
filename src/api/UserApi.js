@@ -5,8 +5,8 @@ export const fetchUser = async (username) => {
     return data;
 };
 
-export const createUser = async ({ firstName, lastName, username, password, city, district }) => {
-    const {data} = await $host.post('api/user', { firstName, lastName, username, password, city, district });
+export const createUser = async ({firstName, lastName, username, password, city, district}) => {
+    const {data} = await $host.post('api/user', {firstName, lastName, username, password, city, district});
     return data;
 }
 

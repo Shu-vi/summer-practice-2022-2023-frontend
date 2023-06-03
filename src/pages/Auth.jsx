@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
+import {actionLoginUser} from "../store/reducers/auth/actionCreators";
 import {Form, Button, Container} from 'react-bootstrap';
-import {createUser, loginUser} from "../api/UserApi";
+import {createUser} from "../api/UserApi";
 import {useNavigate} from 'react-router-dom';
 import {GAMES_ROUTE} from "../utils/consts";
+import {useDispatch} from "react-redux";
 
-function Auth(props) {
+function Auth() {
     const [type, setType] = useState('login');
     const navigate = useNavigate();
     const [data, setData] = useState({
@@ -15,6 +17,7 @@ function Auth(props) {
         city: '',
         district: ''
     });
+    const dispatch = useDispatch();
 
     // Функция для обработки изменения полей ввода
     const handleChange = (e) => {
@@ -36,10 +39,6 @@ function Auth(props) {
         });
     }
 
-    const saveToken = (token) => {
-        localStorage.setItem('token', JSON.stringify(token));
-    }
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -55,8 +54,7 @@ function Auth(props) {
                 });
                 alert('Регистрация прошла успешно');
             } else {
-                const token = await loginUser({...data});
-                saveToken(token);
+                dispatch(actionLoginUser({username: data.username, password: data.password}))
                 navigate(GAMES_ROUTE);
             }
         } catch (e) {

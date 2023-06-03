@@ -17,3 +17,7 @@ export function getUsername() {
 export function deleteToken() {
     localStorage.removeItem('token');
 }
+
+export function saveToken(token) {
+    localStorage.setItem('token', JSON.stringify(token));
+}

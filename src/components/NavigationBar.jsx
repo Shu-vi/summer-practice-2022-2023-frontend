@@ -1,35 +1,24 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import {useNavigate} from "react-router-dom";
 import {GAMES_ROUTE, LOGIN_ROUTE} from "../utils/consts";
-import {fetchUser} from "../api/UserApi";
-import {getUsername} from "../utils/storage";
-import {useErrorHandler} from "../hooks/useErrorHandler";
+import {useDispatch, useSelector} from "react-redux";
+import {actionLogout} from "../store/reducers/auth/actionCreators";
 
 const NavigationBar = () => {
     const navigate = useNavigate();
-    const [username, setUsername] = useState('');
-    const [type, setType] = useState('GUEST');
-    const errorHandler = useErrorHandler();
-    const GUEST = 'GUEST';
-    const USER = 'USER';
+    const user = useSelector(state => state.auth.user)
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        if (getUsername() !== null) {
-            fetchUser(getUsername())
-                .then(data => {
-                    setUsername(data.username);
-                    setType(USER);
-                })
-                .catch(e => errorHandler(e));
-        }
+
     }, []);
 
     const handleButton = () => {
-        if (type === USER) {
-            localStorage.clear();
-            setType(GUEST);
+        if (user !== null) {
+            dispatch(actionLogout())
             navigate(GAMES_ROUTE);
-        } else if (type === GUEST) {
+        } else {
             navigate(LOGIN_ROUTE);
         }
 
@@ -40,10 +29,14 @@ const NavigationBar = () => {
             <Navbar.Brand href="/">Generalov team</Navbar.Brand>
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto">
-                    <Nav.Link href="#">{username}</Nav.Link>
+                    <Nav.Link href="#">
+                        {user && (
+                            user.username
+                        )}
+                    </Nav.Link>
                     <Button variant="outline-secondary" onClick={handleButton}>
                         {
-                            type === GUEST ?
+                            user === null ?
                                 'Войти'
                                 :
                                 'Выйти'
