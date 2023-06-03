@@ -4,7 +4,7 @@ import MessageItem from "../components/MessageItem";
 import {useParams} from "react-router-dom";
 import {fetchPhrasesByGameId} from "../api/PhraseApi";
 
-function Game(props) {
+function Game() {
     const {id} = useParams();
     const [messages, setMessages] = useState([]);
     const [text, setText] = useState('');

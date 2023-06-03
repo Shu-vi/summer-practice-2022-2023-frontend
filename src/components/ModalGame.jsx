@@ -1,32 +1,24 @@
-import React, { useState } from "react";
-import { Button, Modal, Form } from "react-bootstrap";
-import jwtDecode from "jwt-decode";
-import {useNavigate} from "react-router-dom";
-import {LOGIN_ROUTE} from "../utils/consts";
+import React, {useState} from "react";
+import {Button, Modal, Form} from "react-bootstrap";
 import {createGame} from "../api/GameApi";
+import {getUsername} from "../utils/storage";
+import {useErrorHandler} from "../hooks/useErrorHandler";
 
 const ModalGame = ({show, setShow, ...props}) => {
     const [title, setTitle] = useState("");
     const [maxPlayers, setMaxPlayers] = useState(2);
-    const navigate = useNavigate();
+    const errorHandler = useErrorHandler();
 
     const handleClose = () => setShow(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let token = localStorage.getItem('token');
+        const username = getUsername();
         try {
-            if (token) {
-                const data = jwtDecode(token);
-                await createGame({maxPlayers, owner: data.username, title});
-                //TODO отобразить в UI новую игру
-            } else {
-                alert('Срок жизни сессии истёк. Авторизуйтесь снова');
-                navigate(LOGIN_ROUTE);
-            }
+            await createGame({maxPlayers, owner: username, title});
+            //TODO отобразить в UI новую игру
         } catch (e) {
-            alert('Срок жизни сессии истёк. Авторизуйтесь снова');
-            navigate(LOGIN_ROUTE);
+            errorHandler(e);
         }
         handleClose();
     };

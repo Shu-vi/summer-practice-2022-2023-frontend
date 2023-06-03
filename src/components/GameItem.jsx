@@ -2,51 +2,29 @@ import React, {useState} from 'react';
 import {Button} from "react-bootstrap";
 import {connectToGame, countingConnectionByGameId} from "../api/GameApi";
 import {useEffect} from "react";
-import jwtDecode from "jwt-decode";
-import {GAME_ROUTE, LOGIN_ROUTE} from "../utils/consts";
+import {GAME_ROUTE} from "../utils/consts";
 import {useNavigate} from "react-router-dom";
+import {getUsername} from "../utils/storage";
+import {useErrorHandler} from "../hooks/useErrorHandler";
 
 const GameItem = ({game, ...props}) => {
     const [currentPlayer, setCurrentPlayer] = useState(0);
+    const errorHandler = useErrorHandler();
     const navigate = useNavigate();
 
     useEffect(() => {
         countingConnectionByGameId(game.id)
-            .then(count => {
-                setCurrentPlayer(count);
-            })
+            .then(count => setCurrentPlayer(count))
+            .catch(e => errorHandler(e));
     }, []);
 
     const handleJoin = async () => {
-        let token = localStorage.getItem('token');
-        let username = null;
-        try {
-            if (token) {
-                const data = jwtDecode(token);
-                username = data.username;
-            } else {
-                alert('Срок жизни сессии истёк. Авторизуйтесь снова');
-                navigate(LOGIN_ROUTE);
-                return;
-            }
-        } catch (e) {
-            alert('Срок жизни сессии истёк. Авторизуйтесь снова');
-            navigate(LOGIN_ROUTE);
-            return;
-        }
-
+        let username = getUsername();
         try {
             await connectToGame(username, game.id);
             navigate(GAME_ROUTE + `/${game.id}`);
         } catch (e) {
-            if (e.response.data.message) {
-                alert(e.response.data.message);
-                if (e.response.status === 401) {
-                    navigate(LOGIN_ROUTE);
-                }
-            } else {
-                alert(e.message);
-            }
+            errorHandler(e);
         }
     };
     return (

@@ -1,7 +1,7 @@
 import {$authHost, $host} from "./index";
 
 export const fetchUser = async (username) => {
-    const {data} = await $host.get('api/user/' + username);
+    const {data} = await $authHost.get('api/user/' + username);
     return data;
 };
 
