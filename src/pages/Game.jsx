@@ -35,6 +35,7 @@ function Game() {
 
         if (user) {
             socket.current.onopen = () => {
+                console.log('Сокет открыт')
                 socket.current.send(JSON.stringify({
                     id,
                     lastName: user.lastName,

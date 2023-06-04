@@ -26,13 +26,13 @@ function App() {
                     return fetchGameByUsername(username);
                 })
                 .then(game => {
-                    if (game){
+                    if (game) {
                         navigate(GAME_ROUTE + '/' + game.id);
                     }
                 })
                 .catch(e => errorHandler(e));
         }
-    }, [user]);
+    }, []);
     return (
         <>
             <NavigationBar/>

@@ -3,12 +3,15 @@ import {actionLoginUser} from "../store/reducers/auth/actionCreators";
 import {Form, Button, Container} from 'react-bootstrap';
 import {createUser} from "../api/UserApi";
 import {useNavigate} from 'react-router-dom';
-import {GAMES_ROUTE} from "../utils/consts";
-import {useDispatch} from "react-redux";
+import {GAME_ROUTE, GAMES_ROUTE} from "../utils/consts";
+import {useDispatch, useSelector} from "react-redux";
+import {useErrorHandler} from "../hooks/useErrorHandler";
+import {fetchGameByUsername} from "../api/GameApi";
 
 function Auth() {
     const [type, setType] = useState('login');
     const navigate = useNavigate();
+    const error = useSelector(state => state.auth.error);
     const [data, setData] = useState({
         username: '',
         password: '',
@@ -18,8 +21,7 @@ function Auth() {
         district: ''
     });
     const dispatch = useDispatch();
-
-    // Функция для обработки изменения полей ввода
+    const errorHandler = useErrorHandler();
     const handleChange = (e) => {
         const {name, value} = e.target;
         setData((prevData) => ({
@@ -44,25 +46,26 @@ function Auth() {
         try {
             if (type === 'register') {
                 await createUser({...data});
-                setData({
-                    username: '',
-                    password: '',
-                    firstName: '',
-                    lastName: '',
-                    city: '',
-                    district: ''
-                });
+                clearData();
                 alert('Регистрация прошла успешно');
             } else {
                 dispatch(actionLoginUser({username: data.username, password: data.password}))
-                navigate(GAMES_ROUTE);
+                    .then(user => {
+                        if (user) {
+                            return fetchGameByUsername(user.username)
+                                .then(game => {
+                                    if (game) {
+                                        navigate(GAME_ROUTE + '/' + game.id);
+                                    } else {
+                                        navigate(GAMES_ROUTE);
+                                    }
+                                })
+                        }
+                    })
+                    .catch(e => errorHandler(e));
             }
         } catch (e) {
-            if (e.response.data.message) {
-                alert(e.response.data.message)
-            } else {
-                alert(e.message);
-            }
+            errorHandler(e);
         }
     };
 

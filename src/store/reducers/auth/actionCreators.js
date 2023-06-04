@@ -4,14 +4,15 @@ import {loginUserError, loginUserLoading, loginUserSuccess, setUser} from "./aut
 
 export const actionLoginUser = ({username, password}) => async (dispatch) => {
     try {
-        dispatch(loginUserLoading())
+        dispatch(loginUserLoading());
         const token = await loginUser({username, password});
         saveToken(token);
         const user = await fetchUser(username);
         dispatch(loginUserSuccess(user));
         return user;
     } catch (e) {
-        dispatch(loginUserError(e.message));
+        dispatch(loginUserError(e.response.data));
+        throw e;
     }
 }
 
