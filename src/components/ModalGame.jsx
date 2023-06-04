@@ -4,7 +4,7 @@ import {createGame} from "../api/GameApi";
 import {getUsername} from "../utils/storage";
 import {useErrorHandler} from "../hooks/useErrorHandler";
 
-const ModalGame = ({show, setShow, ...props}) => {
+const ModalGame = ({show, setShow, setGames, ...props}) => {
     const [title, setTitle] = useState("");
     const [maxPlayers, setMaxPlayers] = useState(2);
     const errorHandler = useErrorHandler();
@@ -15,8 +15,8 @@ const ModalGame = ({show, setShow, ...props}) => {
         e.preventDefault();
         const username = getUsername();
         try {
-            await createGame({maxPlayers, owner: username, title});
-            //TODO отобразить в UI новую игру
+            const game = await createGame({maxPlayers, owner: username, title});
+            setGames(prev => [...prev, game]);
         } catch (e) {
             errorHandler(e);
         }

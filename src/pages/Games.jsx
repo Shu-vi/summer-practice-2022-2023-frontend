@@ -72,7 +72,7 @@ function Games() {
                     </Col>
                 </Row>
             </Container>
-            <ModalGame show={show} setShow={setShow}/>
+            <ModalGame show={show} setShow={setShow} setGames={setGames}/>
         </>
 
     );
