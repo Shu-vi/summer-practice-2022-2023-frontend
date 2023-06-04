@@ -53,14 +53,16 @@ function Games() {
             <Container className="mt-5" style={{height: '70vh'}}>
                 <Row>
                     <Col>
-                        <InputGroup className="mb-3">
-                            <InputGroup.Text>Поиск</InputGroup.Text>
+                        <InputGroup className="mb-1">
                             <FormControl
                                 placeholder="Введите название игры"
                                 value={search}
                                 onChange={handleSearchChange}
                             />
                         </InputGroup>
+                        <Button variant='outline-info' className='mb-3'>
+                            Поиск
+                        </Button>
                     </Col>
                 </Row>
                 <Row style={{height: '100%', overflowY: 'scroll'}}>
@@ -91,7 +93,7 @@ function Games() {
                     </Col>
                 </Row>
             </Container>
-            <ModalGame show={show} setShow={setShow} setGames={setGames}/>
+            <ModalGame show={show} setShow={setShow} setGames={setGames} setError={setError}/>
         </>
 
     );
