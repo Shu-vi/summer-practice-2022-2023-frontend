@@ -41,6 +41,7 @@ function Games() {
             })
             .catch(e => {
                 if (e.response.data.message) {
+                    setGames([]);
                     setError(e.response.data.message);
                 } else {
                     setError(e.message);
