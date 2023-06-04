@@ -7,12 +7,8 @@ import {actionLogout} from "../store/reducers/auth/actionCreators";
 
 const NavigationBar = () => {
     const navigate = useNavigate();
-    const user = useSelector(state => state.auth.user)
+    const user = useSelector(state => state.auth.user);
     const dispatch = useDispatch();
-
-    useEffect(() => {
-
-    }, []);
 
     const handleButton = () => {
         if (user !== null) {

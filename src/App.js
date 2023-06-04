@@ -3,7 +3,7 @@ import NavigationBar from "./components/NavigationBar";
 import {useEffect} from "react";
 import {getUsername} from "./utils/storage";
 import {fetchUser} from "./api/UserApi";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setUser} from "./store/reducers/auth/authSlice";
 import {useErrorHandler} from "./hooks/useErrorHandler";
 import {fetchGameByUsername} from "./api/GameApi";
@@ -14,6 +14,7 @@ function App() {
     const dispatch = useDispatch();
     const errorHandler = useErrorHandler();
     const navigate = useNavigate();
+    const user = useSelector(state => state.auth.user);
     useEffect(() => {
         const username = getUsername();
         if (username) {
@@ -31,7 +32,7 @@ function App() {
                 })
                 .catch(e => errorHandler(e));
         }
-    }, []);
+    }, [user]);
     return (
         <>
             <NavigationBar/>

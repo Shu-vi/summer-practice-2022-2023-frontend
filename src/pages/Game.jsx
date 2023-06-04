@@ -15,38 +15,48 @@ function Game() {
     const navigate = useNavigate();
     const errorHandler = useErrorHandler();
     const user = useSelector(state => state.auth.user);
-    const socket = useRef(new WebSocket('ws://localhost:5002/'));
+    const socket = useRef(null);
 
     useEffect(() => {
         fetchPhrasesByGameId(id)
-            .then(data => setMessages(data))
+            .then(data => setMessages(data || []))
             .catch(e => errorHandler(e));
     }, []);
 
+    useEffect(() => {
+        const ws = new WebSocket('ws://localhost:5002/');
+        socket.current = ws;
+        return () => {
+            ws.close();
+        };
+    }, [])
 
     useEffect(() => {
+
         if (user) {
             socket.current.onopen = () => {
-                console.log('Подключение установлено')
                 socket.current.send(JSON.stringify({
                     id,
                     lastName: user.lastName,
                     firstName: user.firstName,
                     method: "connection"
-                }))
+                }));
             }
             socket.current.onmessage = (event) => {
-                let msg = JSON.parse(event.data)
+                let msg = JSON.parse(event.data);
                 switch (msg.method) {
                     case "connection":
                         console.log(`пользователь ${msg.lastName} присоединился`);
-                        break
+                        break;
                     case "chat":
-                        setMessages(prevMessages => [...prevMessages, msg.msg])
-                        break
+                        setMessages(prevMessages => [...prevMessages, msg.msg]);
+                        break;
+                    default:
+                        break;
                 }
             }
         }
+
     }, [user])
 
 
