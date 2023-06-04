@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Button, Form, InputGroup, FormControl, Container} from 'react-bootstrap';
 import MessageItem from "../components/MessageItem";
 import {useNavigate, useParams} from "react-router-dom";
@@ -14,13 +14,41 @@ function Game() {
     const [text, setText] = useState('');
     const navigate = useNavigate();
     const errorHandler = useErrorHandler();
-    const user = useSelector(state => state.auth.user)
+    const user = useSelector(state => state.auth.user);
+    const socket = useRef(new WebSocket('ws://localhost:5002/'));
 
     useEffect(() => {
         fetchPhrasesByGameId(id)
             .then(data => setMessages(data))
             .catch(e => errorHandler(e));
     }, []);
+
+
+    useEffect(() => {
+        if (user) {
+            socket.current.onopen = () => {
+                console.log('Подключение установлено')
+                socket.current.send(JSON.stringify({
+                    id,
+                    lastName: user.lastName,
+                    firstName: user.firstName,
+                    method: "connection"
+                }))
+            }
+            socket.current.onmessage = (event) => {
+                let msg = JSON.parse(event.data)
+                switch (msg.method) {
+                    case "connection":
+                        console.log(`пользователь ${msg.lastName} присоединился`);
+                        break
+                    case "chat":
+                        setMessages(prevMessages => [...prevMessages, msg.msg])
+                        break
+                }
+            }
+        }
+    }, [user])
+
 
     const handleTextChange = (e) => {
         setText(e.target.value);
@@ -35,9 +63,10 @@ function Game() {
     const handleSubmit = (e) => {
         e.preventDefault();
         createPhrase({gameId: id, username: user.username, text})
-            .then(() => (fetchPhrasesByGameId(id)))
-            .then(data => setMessages(data))
-            .catch(e=> console.error(e))
+            .then(phrase => {
+                socket.current.send(JSON.stringify({msg: {user, phrase}, method: 'chat', id}));
+            })
+            .catch(e => console.error(e))
         setText('');
     };
 
