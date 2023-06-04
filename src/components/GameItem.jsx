@@ -6,11 +6,13 @@ import {GAME_ROUTE} from "../utils/consts";
 import {useNavigate} from "react-router-dom";
 import {getUsername} from "../utils/storage";
 import {useErrorHandler} from "../hooks/useErrorHandler";
+import {useSelector} from "react-redux";
 
 const GameItem = ({game, ...props}) => {
     const [currentPlayer, setCurrentPlayer] = useState(0);
     const errorHandler = useErrorHandler();
     const navigate = useNavigate();
+    const user = useSelector(state => state.auth.user);
 
     useEffect(() => {
         countingConnectionByGameId(game.id)
@@ -35,7 +37,7 @@ const GameItem = ({game, ...props}) => {
             </div>
             <div className="d-flex align-items-center">
                 <p className="mr-3">Игроков: {currentPlayer}/{game.maxPlayers}</p>
-                <Button variant="primary" onClick={() => handleJoin()}>
+                <Button variant="primary" onClick={handleJoin} disabled={user === null}>
                     Подключиться
                 </Button>
             </div>

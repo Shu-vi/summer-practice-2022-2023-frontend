@@ -3,12 +3,14 @@ import {Container, Row, Col, InputGroup, FormControl, Button, ListGroup} from 'r
 import GameItem from "../components/GameItem";
 import {fetchAll} from "../api/GameApi";
 import ModalGame from "../components/ModalGame";
+import {useSelector} from "react-redux";
 
 function Games() {
     const [games, setGames] = useState([]);
     const [search, setSearch] = useState('');
     const [error, setError] = useState('');
     const [show, setShow] = useState(false);
+    const user = useSelector(state => state.auth.user);
 
     useEffect(() => {
         fetchAll()
@@ -80,7 +82,7 @@ function Games() {
                 </Row>
                 <Row className="mt-3">
                     <Col className="d-flex justify-content-end">
-                        <Button variant="success" onClick={handleCreate}>
+                        <Button variant="success" onClick={handleCreate} disabled={user === null}>
                             Создать свою игру
                         </Button>
                         <Button onClick={refreshHandler}>
