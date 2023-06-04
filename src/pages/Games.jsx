@@ -21,7 +21,7 @@ function Games() {
                 } else {
                     setError(e.message);
                 }
-            })
+            });
     }, []);
 
     const handleSearchChange = (e) => {
@@ -31,6 +31,20 @@ function Games() {
     const handleCreate = () => {
         setShow(true);
     };
+
+    const refreshHandler = () => {
+        fetchAll()
+            .then(data => {
+                setGames(data);
+            })
+            .catch(e => {
+                if (e.response.data.message) {
+                    setError(e.response.data.message);
+                } else {
+                    setError(e.message);
+                }
+            });
+    }
 
     return (
         <>
@@ -68,6 +82,9 @@ function Games() {
                     <Col className="d-flex justify-content-end">
                         <Button variant="success" onClick={handleCreate}>
                             Создать свою игру
+                        </Button>
+                        <Button onClick={refreshHandler}>
+                            Обновить
                         </Button>
                     </Col>
                 </Row>
