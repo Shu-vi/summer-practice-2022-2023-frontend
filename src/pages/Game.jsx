@@ -3,7 +3,7 @@ import {Button, Form, InputGroup, FormControl, Container} from 'react-bootstrap'
 import MessageItem from "../components/MessageItem";
 import {useNavigate, useParams} from "react-router-dom";
 import {createPhrase, fetchPhrasesByGameId} from "../api/PhraseApi";
-import {disconnectFromGame} from "../api/GameApi";
+import {disconnectFromGame, fetchGameById} from "../api/GameApi";
 import {GAMES_ROUTE} from "../utils/consts";
 import {useErrorHandler} from "../hooks/useErrorHandler";
 import {useSelector} from "react-redux";
@@ -20,6 +20,17 @@ function Game() {
     const errorHandler = useErrorHandler();
     const user = useSelector(state => state.auth.user);
     const socket = useRef(null);
+
+    useEffect(() => {
+        fetchGameById(id)
+            .then(game => {
+                if (!game) {
+                    alert('Игра была удалена или ещё не создана');
+                    navigate(GAMES_ROUTE);
+                }
+            })
+            .catch(e => errorHandler(e));
+    }, [])
 
     useEffect(() => {
         fetchPhrasesByGameId(id)
