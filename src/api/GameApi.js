@@ -34,3 +34,8 @@ export const countingConnectionByGameId = async (gameId) => {
     const {data} = await $authHost.get('api/game/count/' + gameId);
     return data;
 };
+
+export const searchGames = async (criterion) => {
+    const {data} = await $host.post('api/game/search', {criterion});
+    return data;
+};

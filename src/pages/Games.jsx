@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Container, Row, Col, InputGroup, FormControl, Button, ListGroup} from 'react-bootstrap';
 import GameItem from "../components/GameItem";
-import {fetchAll} from "../api/GameApi";
+import {fetchAll, searchGames, searchGamesByUsernameOrTitle} from "../api/GameApi";
 import ModalGame from "../components/ModalGame";
 import {useSelector} from "react-redux";
+import {useErrorHandler} from "../hooks/useErrorHandler";
 
 function Games() {
     const [games, setGames] = useState([]);
@@ -11,6 +12,7 @@ function Games() {
     const [error, setError] = useState('');
     const [show, setShow] = useState(false);
     const user = useSelector(state => state.auth.user);
+    const errorHandler = useErrorHandler();
 
     useEffect(() => {
         fetchAll()
@@ -47,6 +49,18 @@ function Games() {
                     setError(e.message);
                 }
             });
+    };
+
+    const searchHandler = () => {
+        searchGames(search)
+            .then(data => setGames(data))
+            .catch(e => {
+                errorHandler(e);
+                if (e.response) {
+                    setError(e.response.data.message);
+                }
+                setGames([]);
+            });
     }
 
     return (
@@ -56,12 +70,12 @@ function Games() {
                     <Col>
                         <InputGroup className="mb-1">
                             <FormControl
-                                placeholder="Введите название игры"
+                                placeholder="Введите название игры или имя пользователя автора"
                                 value={search}
                                 onChange={handleSearchChange}
                             />
                         </InputGroup>
-                        <Button variant='outline-info' className='mb-3'>
+                        <Button variant='outline-info' className='mb-3' onClick={searchHandler}>
                             Поиск
                         </Button>
                     </Col>
