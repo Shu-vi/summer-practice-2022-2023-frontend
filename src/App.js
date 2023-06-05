@@ -1,9 +1,9 @@
 import AppRouter from "./components/AppRouter";
 import NavigationBar from "./components/NavigationBar";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {getUsername} from "./utils/storage";
 import {fetchUser} from "./api/UserApi";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {setUser} from "./store/reducers/auth/authSlice";
 import {useErrorHandler} from "./hooks/useErrorHandler";
 import {fetchGameByUsername} from "./api/GameApi";
@@ -15,7 +15,8 @@ function App() {
     const dispatch = useDispatch();
     const errorHandler = useErrorHandler();
     const navigate = useNavigate();
-    const user = useSelector(state => state.auth.user);
+    const [isUserChecked, setIsUserChecked] = useState(false);
+
     useEffect(() => {
         const username = getUsername();
         if (username) {
@@ -31,9 +32,19 @@ function App() {
                         navigate(GAME_ROUTE + '/' + game.id);
                     }
                 })
-                .catch(e => errorHandler(e));
+                .catch(e => {
+                    errorHandler(e);
+                })
+                .finally(() => setIsUserChecked(true));
+        } else {
+            setIsUserChecked(true)
         }
     }, []);
+
+    if (!isUserChecked) {
+        return (<div>Loading..</div>);
+    }
+
     return (
         <>
             <YMaps>
