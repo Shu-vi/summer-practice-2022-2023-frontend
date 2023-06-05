@@ -18,7 +18,7 @@ const GameItem = ({game, ...props}) => {
         countingConnectionByGameId(game.id)
             .then(count => setCurrentPlayer(count))
             .catch(e => errorHandler(e));
-    }, []);
+    }, [game]);
 
     const handleJoin = async () => {
         let username = getUsername();
