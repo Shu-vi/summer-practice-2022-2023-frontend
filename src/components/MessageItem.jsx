@@ -9,8 +9,10 @@ const MessageItem = ({message, ...props}) => {
         month = month.toString().length === 1 ? '0' + month.toString() : month.toString();
         let day = date.getDate();
         day = day.toString().length === 1 ? '0' + day.toString() : day.toString();
-        const hours = date.getHours();
-        const minutes = date.getMinutes();
+        let hours = date.getHours();
+        hours = hours.toString().length === 1 ? '0' + hours.toString() : hours.toString();
+        let minutes = date.getMinutes();
+        minutes = minutes.toString().length === 1 ? '0' + minutes.toString() : minutes.toString();
         return `${day}.${month}.${year} ${hours}:${minutes}`;
     }
 
