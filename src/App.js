@@ -9,6 +9,7 @@ import {useErrorHandler} from "./hooks/useErrorHandler";
 import {fetchGameByUsername} from "./api/GameApi";
 import {useNavigate} from "react-router-dom";
 import {GAME_ROUTE} from "./utils/consts";
+import {YMaps} from "@pbe/react-yandex-maps";
 
 function App() {
     const dispatch = useDispatch();
@@ -35,8 +36,10 @@ function App() {
     }, []);
     return (
         <>
-            <NavigationBar/>
-            <AppRouter/>
+            <YMaps>
+                <NavigationBar/>
+                <AppRouter/>
+            </YMaps>
         </>
     );
 }

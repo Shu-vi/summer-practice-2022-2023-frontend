@@ -4,7 +4,7 @@ import {createGame} from "../api/GameApi";
 import {getUsername} from "../utils/storage";
 import {useErrorHandler} from "../hooks/useErrorHandler";
 
-const ModalGame = ({show, setShow, setGames, setError, ...props}) => {
+const ModalCreateGame = ({show, setShow, setGames, setError, ...props}) => {
     const [title, setTitle] = useState("");
     const [maxPlayers, setMaxPlayers] = useState(2);
     const errorHandler = useErrorHandler();
@@ -64,4 +64,4 @@ const ModalGame = ({show, setShow, setGames, setError, ...props}) => {
     );
 }
 
-export default ModalGame;
+export default ModalCreateGame;

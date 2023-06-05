@@ -19,3 +19,8 @@ export const loginUser = async ({username, password}) => {
     const {data} = await $authHost.post('api/user/login', {username, password});
     return data;
 }
+
+export const getUsersByGameId = async (gameId) => {
+    const {data} = await $authHost.post('api/user/by-game-id', {gameId});
+    return data;
+}

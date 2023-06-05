@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Container, Row, Col, InputGroup, FormControl, Button, ListGroup} from 'react-bootstrap';
 import GameItem from "../components/GameItem";
-import {fetchAll, searchGames, searchGamesByUsernameOrTitle} from "../api/GameApi";
-import ModalGame from "../components/ModalGame";
+import {fetchAll, searchGames} from "../api/GameApi";
+import ModalCreateGame from "../components/ModalCreateGame";
 import {useSelector} from "react-redux";
 import {useErrorHandler} from "../hooks/useErrorHandler";
 
@@ -108,9 +108,8 @@ function Games() {
                     </Col>
                 </Row>
             </Container>
-            <ModalGame show={show} setShow={setShow} setGames={setGames} setError={setError}/>
+            <ModalCreateGame show={show} setShow={setShow} setGames={setGames} setError={setError}/>
         </>
-
     );
 }
 

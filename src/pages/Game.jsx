@@ -7,11 +7,15 @@ import {disconnectFromGame} from "../api/GameApi";
 import {GAMES_ROUTE} from "../utils/consts";
 import {useErrorHandler} from "../hooks/useErrorHandler";
 import {useSelector} from "react-redux";
+import ModalYandexMap from "../components/ModalYandexMap";
+import {getUsersByGameId} from "../api/UserApi";
 
 function Game() {
     const {id} = useParams();
     const [messages, setMessages] = useState([]);
     const [text, setText] = useState('');
+    const [show, setShow] = useState(false);
+    const [users, setUsers] = useState([]);
     const navigate = useNavigate();
     const errorHandler = useErrorHandler();
     const user = useSelector(state => state.auth.user);
@@ -26,13 +30,15 @@ function Game() {
     useEffect(() => {
         const ws = new WebSocket('ws://localhost:5002/');
         socket.current = ws;
+        getUsersByGameId(id)
+            .then(data => setUsers(data || []))
+            .catch(e => errorHandler(e));
         return () => {
             ws.close();
         };
     }, [])
 
     useEffect(() => {
-
         if (user) {
             socket.current.onopen = () => {
                 console.log('Сокет открыт')
@@ -60,7 +66,6 @@ function Game() {
 
     }, [user])
 
-
     const handleTextChange = (e) => {
         setText(e.target.value);
     };
@@ -81,29 +86,45 @@ function Game() {
         setText('');
     };
 
+    const handleShowMap = () => {
+        getUsersByGameId(id)
+            .then(data => {
+                setUsers(data);
+                setShow(true);
+            })
+            .catch(e => errorHandler(e));
+    }
+
     return (
-        <Container className="mt-4">
-            <Button variant="danger" onClick={handleLeave}>
-                Покинуть игру
-            </Button>
-            <div className="mt-3" style={{height: '70vh', overflowY: 'scroll', border: 'solid 1px black'}}>
-                {messages.map((message) => (
-                    <MessageItem message={message} key={message.phrase.timestamp}/>
-                ))}
-            </div>
-            <Form onSubmit={handleSubmit}>
-                <InputGroup className="mt-3">
-                    <FormControl
-                        placeholder="Введите сообщение"
-                        value={text}
-                        onChange={handleTextChange}
-                    />
-                    <Button variant="primary" type="submit">
-                        Отправить
-                    </Button>
-                </InputGroup>
-            </Form>
-        </Container>
+        <>
+            <Container className="mt-4">
+                <Button variant="danger" onClick={handleLeave}>
+                    Покинуть игру
+                </Button>
+                <Button variant='info' onClick={handleShowMap}>
+                    Карта
+                </Button>
+                <div className="mt-3" style={{height: '70vh', overflowY: 'scroll', border: 'solid 1px black'}}>
+                    {messages.map((message) => (
+                        <MessageItem message={message} key={message.phrase.timestamp}/>
+                    ))}
+                </div>
+                <Form onSubmit={handleSubmit}>
+                    <InputGroup className="mt-3">
+                        <FormControl
+                            placeholder="Введите сообщение"
+                            value={text}
+                            onChange={handleTextChange}
+                        />
+                        <Button variant="primary" type="submit">
+                            Отправить
+                        </Button>
+                    </InputGroup>
+                </Form>
+            </Container>
+            <ModalYandexMap setShow={setShow} show={show} users={users} setUsers={setUsers}/>
+        </>
+
     );
 }
 
