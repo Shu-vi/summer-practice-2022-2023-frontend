@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import {useNavigate} from "react-router-dom";
-import {GAMES_ROUTE, LOGIN_ROUTE} from "../utils/consts";
+import {ADMIN_ROUTE, GAMES_ROUTE, LOGIN_ROUTE} from "../utils/consts";
 import {useDispatch, useSelector} from "react-redux";
 import {actionLogout} from "../store/reducers/auth/actionCreators";
 
@@ -20,12 +20,18 @@ const NavigationBar = () => {
 
     };
 
+    const handleUsername = () => {
+        if (user.role === 'ADMIN') {
+            navigate(ADMIN_ROUTE);
+        }
+    }
+
     return (
         <Navbar bg="light" expand="lg">
             <Navbar.Brand href="/">Generalov team</Navbar.Brand>
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto">
-                    <Nav.Link href="#">
+                    <Nav.Link href="#" onClick={handleUsername}>
                         {user && (
                             user.username
                         )}
