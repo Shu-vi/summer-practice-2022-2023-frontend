@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Col, Container, FormControl, InputGroup, ListGroup, Row} from "react-bootstrap";
-import GameItem from "../components/GameItem";
+import {Col, Container, ListGroup, Row} from "react-bootstrap";
 import {Map, Placemark} from "@pbe/react-yandex-maps";
-import {getActiveUsers, getUsersByGameId} from "../api/UserApi";
+import {getAllUsers} from "../api/UserApi";
 import {useErrorHandler} from "../hooks/useErrorHandler";
 import {geocodeLocation} from "../api/openstreet-api/CoordinatesApi";
 import {useSelector} from "react-redux";
-import carousel from "bootstrap/js/src/carousel";
+import UserItem from "../components/UserItem";
 
 const Admin = () => {
     const [users, setUsers] = useState([]);
@@ -17,11 +16,11 @@ const Admin = () => {
 
     useEffect(() => {
         const fetchUsers = async () => {
-            const temp = await getActiveUsers();
+            const temp = await getAllUsers();
             if (temp) {
                 setUsers(temp);
             } else {
-                setError('Не найден ни 1 активный пользователь');
+                setError('Не найден ни 1 пользователь');
             }
         }
 
@@ -50,6 +49,24 @@ const Admin = () => {
 
     return (
         <Container className="mt-5" style={{height: '70vh'}}>
+            <Row style={{overflowY: 'scroll'}} className='h-100 mb-5'>
+                <Col>
+                    <ListGroup>
+                        {
+                            users.map((user) => (
+                                (<ListGroup.Item key={user.username}>
+                                    <UserItem user={user}/>
+                                </ListGroup.Item>)))
+                        }
+                        {
+                            error !== '' && (
+                                error
+                            )
+                        }
+                    </ListGroup>
+                </Col>
+            </Row>
+
             {error}
             <Map
                 defaultState={{

@@ -10,8 +10,8 @@ export const createUser = async ({firstName, lastName, username, password, city,
     return data;
 }
 
-export const updateUser = async ({firstName, lastName, username, password, city, district}) => {
-    const {data} = await $authHost.put('api/user/', {firstName, lastName, username, password, city, district});
+export const updateUser = async ({firstName, lastName, username, password, city, district, role}) => {
+    const {data} = await $authHost.put('api/user/', {firstName, lastName, username, password, city, district, role});
     return data;
 }
 
@@ -25,7 +25,7 @@ export const getUsersByGameId = async (gameId) => {
     return data;
 }
 
-export const getActiveUsers = async () => {
-    const {data} = await $authHost.post('api/user/active');
+export const getAllUsers = async () => {
+    const {data} = await $authHost.get('api/user/');
     return data;
 }
