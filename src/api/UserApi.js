@@ -24,3 +24,8 @@ export const getUsersByGameId = async (gameId) => {
     const {data} = await $authHost.post('api/user/by-game-id', {gameId});
     return data;
 }
+
+export const getActiveUsers = async () => {
+    const {data} = await $authHost.post('api/user/active');
+    return data;
+}
