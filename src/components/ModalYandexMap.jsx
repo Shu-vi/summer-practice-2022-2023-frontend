@@ -26,7 +26,7 @@ const ModalYandexMap = ({show, setShow, users, setUsers, ...props}) => {
         };
 
         fetchUserCoords();
-    }, [users, errorHandler]);
+    }, [users]);
 
     const handleClose = () => setShow(false);
 
