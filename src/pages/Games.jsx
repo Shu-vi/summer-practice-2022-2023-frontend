@@ -20,7 +20,7 @@ function Games() {
                 setGames(data);
             })
             .catch(e => {
-                if (e.response.data.message) {
+                if (e.response.data) {
                     setError(e.response.data.message);
                 } else {
                     setError(e.message);
