@@ -39,7 +39,7 @@ function Game() {
     }, []);
 
     useEffect(() => {
-        const ws = new WebSocket('ws://localhost:5002/');
+        const ws = new WebSocket(process.env.REACT_APP_SOCKET_API_URL);
         socket.current = ws;
         getUsersByGameId(id)
             .then(data => setUsers(data || []))
