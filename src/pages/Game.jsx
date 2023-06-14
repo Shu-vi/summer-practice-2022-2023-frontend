@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Button, Form, InputGroup, FormControl, Container} from 'react-bootstrap';
+import {Button, Form, InputGroup, FormControl, Container, Row, Col} from 'react-bootstrap';
 import MessageItem from "../components/MessageItem";
 import {useNavigate, useParams} from "react-router-dom";
 import {createPhrase, fetchPhrasesByGameId} from "../api/PhraseApi";
@@ -107,30 +107,49 @@ function Game() {
 
     return (
         <>
-            <Container className="mt-4">
-                <Button variant="danger" onClick={handleLeave}>
-                    Покинуть игру
-                </Button>
-                <Button variant='info' onClick={handleShowMap}>
-                    Карта
-                </Button>
-                <div className="mt-3" style={{height: '70vh', overflowY: 'scroll', border: 'solid 1px black'}}>
-                    {messages.map((message) => (
-                        <MessageItem message={message} key={message.phrase.timestamp}/>
-                    ))}
-                </div>
-                <Form onSubmit={handleSubmit}>
-                    <InputGroup className="mt-3">
-                        <FormControl
-                            placeholder="Введите сообщение"
-                            value={text}
-                            onChange={handleTextChange}
-                        />
-                        <Button variant="primary" type="submit">
-                            Отправить
-                        </Button>
-                    </InputGroup>
-                </Form>
+            <Container className="bg-dark text-white mt-4" style={{height: '80vh', borderRadius: 20, width: '95%', marginLeft: "20%"}}>
+                   {/* <Button variant="danger" onClick={handleLeave}>
+                        Покинуть игру
+                    </Button>
+                    <Button variant='info' onClick={handleShowMap}>
+                        Карта
+                    </Button>*/}
+                <Row style={{display:"flex"}}>
+                    <Col className="col-8">
+                    <div className="mt-3"  style={{height: 600, overflowY: 'scroll', borderRadius: 20, backgroundColor: '#ffffe0', border: 'solid 2px green'}}>
+                        {messages.map((message) => (
+                            <MessageItem  message={message} key={message.phrase.timestamp}/>
+                        ))}
+                    </div>
+                    <Form onSubmit={handleSubmit}>
+                        <InputGroup className="mt-4">
+
+                                <FormControl
+                                    className=" form-control bg-dark text-white"
+                                    placeholder="Введите сообщение"
+                                    value={text}
+                                    onChange={handleTextChange}
+                                />
+                                <Button variant="success" type="submit" className="ml-3">
+                                    Отправить
+                                </Button>
+
+                        </InputGroup>
+                    </Form>
+                    </Col>
+                    <Col>
+                        <Row className="justify-content-center" style ={{marginTop: "70%"}}>
+                            <Button variant='info' onClick={handleShowMap}>
+                                Карта
+                            </Button>
+                        </Row>
+                        <Row className="justify-content-center mt-5">
+                            <Button variant="danger" onClick={handleLeave}>
+                                Покинуть игру
+                            </Button>
+                        </Row>
+                    </Col>
+                </Row>
             </Container>
             <ModalYandexMap setShow={setShow} show={show} users={users} setUsers={setUsers}/>
         </>

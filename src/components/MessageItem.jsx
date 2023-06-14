@@ -17,7 +17,8 @@ const MessageItem = ({message, ...props}) => {
     }
 
     return (
-        <div className="m-2 p-2" style={{border: '1px solid black'}}>
+        <div className="m-2 p-2 bg-dark" style={{border: '1px solid black',borderRadius: 10, boxShadow: '3px 3px 3px gray'}}>
+            {/*style = {{borderRadius: 10, marginBottom:10, boxShadow: '3px 3px 3px gray'}} className={"bg-dark"}*/}
             <p>
                 <strong>{message.user.firstName} {message.user.lastName}</strong> ({timestampToDate(message.phrase.timestamp)})
             </p>

@@ -27,16 +27,16 @@ const NavigationBar = () => {
     }
 
     return (
-        <Navbar bg="light" expand="lg">
-            <Navbar.Brand href="/">Generalov team</Navbar.Brand>
+        <Navbar  className="bg-dark" expand="lg">
+            <Navbar.Brand href="/" className="text-white">Sidlyaruk team</Navbar.Brand>
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto">
-                    <Nav.Link href="#" onClick={handleUsername}>
+                    <Nav.Link href="#" onClick={handleUsername} className="text-white">
                         {user && (
                             user.username
                         )}
                     </Nav.Link>
-                    <Button variant="outline-secondary" onClick={handleButton}>
+                    <Button variant="outline-secondary" onClick={handleButton} className="btn btn-dark btn-outline-light">
                         {
                             user === null ?
                                 'Войти'

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button} from "react-bootstrap";
+import {Button, Col, Row} from "react-bootstrap";
 import ModalEditUser from "./ModalEditUser";
 
 const UserItem = ({user, ...props}) => {
@@ -8,17 +8,25 @@ const UserItem = ({user, ...props}) => {
         <>
             <div className="d-flex justify-content-between align-items-center">
                 <div className='d-flex align-items-center'>
-                    <div>
-                        <h5>{user.username}</h5>
-                        <p>{user.firstName} {user.lastName}</p>
-                    </div>
-                    <div className='ml-5'>
-                        <p>Город: {user.city}</p>
-                        <p>Район: {user.district}</p>
-                    </div>
-                    <p className='ml-5'>Статус: {user.role}</p>
+                    <Row>
+                        <Col>
+                        <div>
+                            <h5>{user.username}</h5>
+                            <p>{user.firstName} {user.lastName}</p>
+                        </div>
+                        </Col>
+                        <Col>
+                        <div className='ml-5'>
+                            <p>Город: {user.city}</p>
+                            <p>Район: {user.district}</p>
+                        </div>
+                        </Col>
+                        <Col>
+                        <p className='ml-5'>Статус: {user.role}</p>
+                        </Col>
+                    </Row>
                 </div>
-                <Button variant="primary" onClick={() => {setShow(true);}}>
+                <Button variant="outline-info" onClick={() => {setShow(true);}}>
                     Редактировать
                 </Button>
             </div>

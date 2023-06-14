@@ -48,26 +48,27 @@ const Admin = () => {
     }, [users]);
 
     return (
-        <Container className="mt-5" style={{height: '70vh'}}>
-            <Row style={{overflowY: 'scroll'}} className='h-100 mb-5'>
-                <Col>
-                    <ListGroup>
-                        {
-                            users.map((user) => (
-                                (<ListGroup.Item key={user.username}>
-                                    <UserItem user={user}/>
-                                </ListGroup.Item>)))
-                        }
-                        {
-                            error !== '' && (
-                                error
-                            )
-                        }
-                    </ListGroup>
-                </Col>
-            </Row>
-
-            {error}
+        <Container className="mt-5 d-flex bg-dark align-items-center" style={{height: '70vh', borderRadius: 20, maxWidth: "85%"}}>
+            <Col>
+                <h1 className="text-center text-white mb-5">Список пользователей</h1>
+                <Row style={{overflowY: 'scroll', border: "1px solid white", borderRadius: 10, backgroundColor: '#ffffe0'}} className='h-90 mb-5 w-100 mr-5 pt-3 ml-2'>
+                    <Col>
+                        <ListGroup>
+                            {
+                                users.map((user) => (
+                                    (<ListGroup.Item key={user.username} className="mb-2 bg-dark text-white" style={{boxShadow: '3px 3px 3px gray', borderRadius:10}}>
+                                        <UserItem user={user}/>
+                                    </ListGroup.Item>)))
+                            }
+                            {
+                                error !== '' && (
+                                    error
+                                )
+                            }
+                        </ListGroup>
+                    </Col>
+                </Row>
+            </Col>
             <Map
                 defaultState={{
                     center: [55.75, 37.57],
@@ -75,7 +76,8 @@ const Admin = () => {
                     controls: ["zoomControl", "fullscreenControl"],
                 }}
                 modules={["control.ZoomControl", "control.FullscreenControl"]}
-                style={{width: '100%', height: '60vh'}}
+                style={{height: '60vh'}}
+                className="w-50"
             >
                 {usersWithCoords.map(user => (
                     <Placemark

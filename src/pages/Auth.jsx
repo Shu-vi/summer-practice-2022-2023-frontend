@@ -7,6 +7,7 @@ import {GAME_ROUTE, GAMES_ROUTE} from "../utils/consts";
 import {useDispatch, useSelector} from "react-redux";
 import {useErrorHandler} from "../hooks/useErrorHandler";
 import {fetchGameByUsername} from "../api/GameApi";
+import '../index.css'
 
 function Auth() {
     const [type, setType] = useState('login');
@@ -75,10 +76,11 @@ function Auth() {
     };
 
     return (
-        <Container className="mt-4">
-            <h1>{type === 'login' ? 'Войти' : 'Зарегистрироваться'}</h1>
-            <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3" controlId="username">
+        <section className="vh-100" style={{/*background: "linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))", */paddingTop: 50}}>
+        <Container className="py-5 bg-dark text-white" style={{borderRadius: 20, width: 550}}>
+            <h1 className="text-center" style={{fontFamily: "monospace", color: "white", fontSize: 35, fontWeight: "normal"}}>{type === 'login' ? 'Вход' : 'Регистрация'}</h1>
+            <Form onSubmit={handleSubmit} style={{fontFamily: "monospace"}}>
+                <Form.Group className="mt-5 mb-3 px-5 " controlId="username">
                     <Form.Label>Имя пользователя</Form.Label>
                     <Form.Control
                         type="text"
@@ -88,7 +90,7 @@ function Auth() {
                         required
                     />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="password">
+                <Form.Group className="mb-3 px-5" controlId="password">
                     <Form.Label>Пароль</Form.Label>
                     <Form.Control
                         type="password"
@@ -100,7 +102,7 @@ function Auth() {
                 </Form.Group>
                 {type === 'register' && (
                     <>
-                        <Form.Group className="mb-3" controlId="firstName">
+                        <Form.Group className="mb-3 px-5" controlId="firstName">
                             <Form.Label>Имя</Form.Label>
                             <Form.Control
                                 type="firstName"
@@ -110,7 +112,7 @@ function Auth() {
                                 required
                             />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="lastName">
+                        <Form.Group className="mb-3 px-5" controlId="lastName">
                             <Form.Label>Фамилия</Form.Label>
                             <Form.Control
                                 type="lastName"
@@ -120,7 +122,7 @@ function Auth() {
                                 required
                             />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="city">
+                        <Form.Group className="mb-3 px-5" controlId="city">
                             <Form.Label>Город</Form.Label>
                             <Form.Control
                                 type="city"
@@ -130,7 +132,7 @@ function Auth() {
                                 required
                             />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="district">
+                        <Form.Group className="mb-3 px-5" controlId="district">
                             <Form.Label>Район</Form.Label>
                             <Form.Control
                                 type="district"
@@ -142,21 +144,24 @@ function Auth() {
                         </Form.Group>
                     </>
                 )}
-                <Button variant="primary" type="submit">
-                    {type === 'login' ? 'Войти' : 'Зарегистрироваться'}
-                </Button>
+                <div className="d-flex justify-content-center">
+                    <Button className=" btn btn-dark btn-outline-light btn-md px-5 mt-5 mb-4 mx-4" type="submit">
+                        {type === 'login' ? 'Войти' : 'Создать аккаунт'}
+                    </Button>
+                </div>
             </Form>
-            <p className="mt-3">
+            <p className="mt-3 text-center">
                 {type === 'login'
                     ? 'Нет аккаунта? '
                     : 'Уже есть аккаунт? '}
-                <a href="#" onClick={handleSwitch}>
+                <a href="#" className="text-white-50 fw-bold " onClick={handleSwitch}>
                     {type === 'login'
                         ? 'Зарегистрироваться'
                         : 'Войти'}
                 </a>
             </p>
         </Container>
+        </section>
     );
 }
 

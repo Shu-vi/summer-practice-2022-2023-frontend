@@ -30,14 +30,14 @@ const GameItem = ({game, ...props}) => {
         }
     };
     return (
-        <div className="d-flex justify-content-between align-items-center">
+        <div className="text-white d-flex justify-content-between align-items-center">
             <div>
                 <h5>{game.title}</h5>
                 <p>Создатель: {game.owner}</p>
             </div>
-            <div className="d-flex align-items-center">
-                <p className="mr-3">Игроков: {currentPlayer}/{game.maxPlayers}</p>
-                <Button variant="primary" onClick={handleJoin} disabled={user === null}>
+            <div className="d-flex align-items-center" >
+                <p className="mr-3 pt-3">Игроки: {currentPlayer}/{game.maxPlayers}</p>
+                <Button variant="outline-info" onClick={handleJoin} disabled={user === null}>
                     Подключиться
                 </Button>
             </div>
